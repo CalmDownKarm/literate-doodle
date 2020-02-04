@@ -10,41 +10,38 @@ url:
     kwargs:
       path: $YAMLPATH/index.html
       # See https://learn.gramener.com/guide/auth/#authorization for auth rules
-      auth: true
       template: true
       headers:
         # Templates may have user-specific content. Cache privately.
         # Keep max-age small (in case we log out & log in as another user.)
         Cache-Control: private, max-age=1
     cache: {expiry: {duration: 1}}
-  aaptracker_departments:
-    pattern: /$YAMLURL/(outcomes|departments)
-    handler: FileHandler
-    kwargs:
-      template: true
-      path: $YAMLPATH/*.html
-  aaptracker_new-login:
-    # Default login_url is /login/. If you change this, change auth.login_url
-    # https://learn.gramener.com/guide/auth/#login-urls
-    pattern: /$YAMLURL/login/
-    # You MUST change the auth before deploying. DBAuth is commonly used.
-    # See https://learn.gramener.com/guide/auth/#database-auth
-    handler: SimpleAuth
-    kwargs:
-      template: $YAMLPATH/login.html
-      credentials:
-        alpha: alpha
-        beta: beta
 
-  aaptracker_new-logout:
-    pattern: /$YAMLURL/logout/
-    handler: LogoutHandler
+  # aaptracker-pages:
+  #   pattern: /$YAMLURL/(.*)
+  #   handler: FileHandler
+  #   kwargs:
+  #     template: true
+  #     path: $YAMLPATH/*.html
 
   aaptracker-promises-form:
-    pattern: /$YAMLURL/promises
+    pattern: /$YAMLURL/data/promises
     handler: FormHandler
     kwargs:
-      url: $YAMLPATH/assets/promises_subpromises.xlsx
+      url: $YAMLPATH/assets/data/Promises.xlsx
+
+  aaptracker-outcomes-form:
+    pattern: /$YAMLURL/data/outcomes
+    handler: FormHandler
+    kwargs:
+      url: $YAMLPATH/assets/data/Outcomes.xlsx
+
+  aaptracker-subpromises-form:
+    pattern: /$YAMLURL/data/subpromises
+    handler: FormHandler
+    kwargs:
+      url: $YAMLPATH/assets/data/Subpromises.xlsx
+  # TODO: ADD a scheduled job that syncs updates from the google sheets
 
 # Gramex init configurations for app: aaptracker_new
 # ----------------------------------------------------------------------------
