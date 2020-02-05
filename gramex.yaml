@@ -17,12 +17,12 @@ url:
         Cache-Control: private, max-age=1
     cache: {expiry: {duration: 1}}
 
-  # aaptracker-pages:
-  #   pattern: /$YAMLURL/(.*)
-  #   handler: FileHandler
-  #   kwargs:
-  #     template: true
-  #     path: $YAMLPATH/*.html
+  aaptracker-pages:
+    pattern: /$YAMLURL/(promises|outcomes)
+    handler: FileHandler
+    kwargs:
+      template: true
+      path: $YAMLPATH/*.html
 
   aaptracker-promises-form:
     pattern: /$YAMLURL/data/promises
