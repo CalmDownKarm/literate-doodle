@@ -36,6 +36,12 @@ url:
     kwargs:
       url: $YAMLPATH/assets/data/Outcomes.xlsx
 
+  aaptracker-departments-form:
+    pattern: /$YAMLURL/data/department
+    handler: FormHandler
+    kwargs:
+      url: $YAMLPATH/assets/data/Departments.xlsx
+
   aaptracker-subpromises-form:
     pattern: /$YAMLURL/data/subpromises
     handler: FormHandler
