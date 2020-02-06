@@ -15,20 +15,37 @@
   <!-- TODO: Filter bars -->
   <div class="container-fluid">
     {% include banner.html %}
-    <div class="row">
-      <div class=>
-    </div>
-    <div class="row">
-      <div class="col-md-2 pr-0">
-        <div class="mx-auto text-center">Outcome 1</div>
-        <div class="mx-auto text-center">Outcome 2</div>
-      </div>
-      <div class="col-md-10 px-0">
-        <ol>
-          <li>This is some promise</li>
-        </ol>
-      </div>
-    </div>
+    <template>
+      <div class="text-center h1 text-primary">Promises</div>
+      <div class="row">
+        <div class="col-md-2 sidebar my-2 pr-0">
+          <div class="h4 text-primary">Outcomes</div>
+          <div class="divider"></div>
+          <ul class="nav nav-pills flex-column">
+            <% outcomes.forEach(function(outcome){ %>
+            <li class="nav-item">
+              <a class="nav-link <%= outcome.Outcome==selOutcome?'active':''%>"
+                href="promises?Outcome=<%=outcome.Outcome%>"><%= outcome.Outcome %></a></li>
+            <% }) %>
+          </ul>
+        </div>
+        <div class="col-md-10 px-0">
+          <div class="col-md-12 ml-0">
+          <% Object.keys(promises).forEach(function(promise){ %>
+            <div class="card mb-2">
+              <div class="card-body">
+                <div class="card-title h4 text-primary"><%= promise.toUpperCase() %></div>
+                <ul class="list-group list-group-flush">
+                  <% promises[promise].forEach(function(subPromise){ %>
+                  <li class="list-group-item"><%=subPromise%></li>
+                  <% }) %>
+                </ul>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+    </template>
+  </div>
   </div> <!-- .container-fluid -->
 
   <script src="ui/jquery/dist/jquery.min.js"></script>
@@ -37,14 +54,26 @@
   <script src="ui/g1/dist/g1.min.js"></script>
   <script>
     $(function () {
+      url = g1.url.parse(window.location)
+      let selOutcome = url.searchKey.Outcome || ''
       $.when(
-        $.get('data/outcomes?_sort=Outcome'),
-        $.get('data/promises?_by=Outcome&_c=Outcome|count')
+        $.getJSON('data/outcomes?_sort=Outcome'),
+        $.getJSON(`data/promises?Outcome=${selOutcome}`)
         // $.get('data/updates')
       ).done(function (outcomes, promises) {
-        output = _.merge(outcomes, promises)
-        console.log(output)
-        $('body').template({ outcomes: output[0] })
+        var promiseCollector = {}
+        promises[0].forEach(function (o) {
+          if (o.Promise in promiseCollector)
+            promiseCollector[o.Promise].push(o['Sub promise'])
+          else
+            promiseCollector[o.Promise] = [o['Sub promise']]
+        })
+        // console.log(promises[0])
+        $('body').template({
+          outcomes: outcomes[0],
+          promises: promiseCollector,
+          selOutcome: selOutcome
+        })
       })
 
     })

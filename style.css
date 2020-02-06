@@ -16,9 +16,20 @@
     Other
       https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss
 */
-@import url("ui/bootstraptheme.css?body-bg=white&navbar-dark-color=rgba(255%2C255%2C255%2C.8)&navbar-dark-hover-color=white");
+@import url("ui/bootstraptheme.css?body-bg=white&navbar-dark-color=rgba(255%2C255%2C255%2C.8)&navbar-dark-hover-color=white&primary=rgba(0%2C120%2C180%2C1)");
 /* For v4 icons, use url("ui/font-awesome/css/font-awesome.min.css") */
 @import url("ui/@fortawesome/fontawesome-free/css/all.min.css");
 
 
 /* custom styles for app: aaptracker_new */
+.card-columns {
+  @include media-breakpoint-only(md){
+    column-count: 7;
+  }
+  @include media-breakpoint-only(lg) {
+    column-count: 4;
+  }
+  @include media-breakpoint-only(xl) {
+    column-count: 5;
+  }
+}
