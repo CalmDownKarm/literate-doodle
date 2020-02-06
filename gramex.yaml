@@ -46,7 +46,7 @@ url:
     pattern: /$YAMLURL/data/subpromises
     handler: FormHandler
     kwargs:
-      url: $YAMLPATH/assets/data/Subpromises.xlsx
+      url: $YAMLPATH/assets/data/Updates.xlsx
   # TODO: ADD a scheduled job that syncs updates from the google sheets
 
 # Gramex init configurations for app: aaptracker_new
