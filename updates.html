@@ -32,26 +32,24 @@
         <div class="col-md-10 px-0">
           <div class="col-md-12 ml-0">
             <% updates.forEach(function(update){ %>
+
+            <%= console.log(update)%>
+
             <div class="card mb-2">
               <div class="card-body">
-                <div class="card-title h4 text-primary text-shadow">
-                  <!-- <button type="button" class="btn btn-primary round"><span class="badge badge-light round">2</span>
-                    Updates</button> -->
-                  <span><%= updates['Description'] %></span>
-                  <!-- </div>
-                <!-- <ul class="list-group list-group-flush">
-                  <% updates[update['Promise']].forEach(function(description){ %> -->
-                  <!-- <li class="list-group-item"> --> -->
-                    <!-- <button type="button" class="btn btn-primary round"><span class="badge badge-light round">1</span>
-                      Updates</button> -->
-                    <!-- <!-- <span><%=description%></span> -->
-                  <!-- </li> -->
-                  <!-- <% }) %> -->
-                  <!-- </ul> -->
-                <!-- </div> -->
-              </div> -->
-              <% }) %>
+                <div class="card-title h6">
+                  <div class="text-primary"><span><%= update.Title %><br><br></span></div>
+                  <span>
+                    <%= update.Description %> <br><br><br>
+                    <pre><%= update['Status']%></pre><a href="<%= update['Proof URL'] %>">Link</a></span>
+                  <h6> <span></span>
+                </div>
+              </div>
             </div>
+
+
+            <% }) %>
+          </div>
     </template>
   </div>
   </div> <!-- .container-fluid -->
