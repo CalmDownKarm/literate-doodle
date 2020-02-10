@@ -18,7 +18,7 @@ url:
     cache: {expiry: {duration: 1}}
 
   aaptracker-pages:
-    pattern: /$YAMLURL/(promises|outcomes)
+    pattern: /$YAMLURL/(promises|outcomes|updates)
     handler: FileHandler
     kwargs:
       template: true
@@ -47,6 +47,12 @@ url:
     handler: FormHandler
     kwargs:
       url: $YAMLPATH/assets/data/Updates.xlsx
+
+  aaptracker-updates-form:
+    pattern: /$YAMLURL/data/updates
+    handler: FormHandler
+    kwargs:
+      url: $YAMLPATH/assets/data/updates.xlsx
   # TODO: ADD a scheduled job that syncs updates from the google sheets
 
 # Gramex init configurations for app: aaptracker_new

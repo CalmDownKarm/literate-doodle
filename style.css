@@ -20,6 +20,9 @@
 /* For v4 icons, use url("ui/font-awesome/css/font-awesome.min.css") */
 @import url("ui/@fortawesome/fontawesome-free/css/all.min.css");
 
+.image-ka-size-hai-ye {
+  height: 75%;
+}
 
 /* custom styles for app: aaptracker_new */
 .card-columns {

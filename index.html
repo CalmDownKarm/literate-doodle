@@ -24,7 +24,7 @@
       <template>
         <% outcomes.forEach(function(outcome){ %>
         <div class="card col-md-3 px-0">
-          <img class="card-img-top img-fluid" src="<%= outcome.img %>">
+          <img class="card-img-top img-fluid image-ka-size-hai-ye" src="<%= outcome.img %>">
           <div class="card-body">
             <h5 class="card-title"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></h5>
             <a href="promises?Outcome=<%= outcome.Outcome %>"><p class="card-text"><%= outcome['Outcome|count']? outcome['Outcome|count'] : outcome['Department|count'] %> Promises</p></a>
