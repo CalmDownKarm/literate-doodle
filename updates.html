@@ -19,30 +19,49 @@
       <div class="text-center h1 text-primary">Updates</div>
       <div class="row">
         <div class="col-md-2 sidebar my-2 pr-0">
-          <div class="h4 text-primary">Outcomes</div>
+          <div class="h4 text-primary">---------------------------</div>
           <div class="divider"></div>
-          <ul class="nav flex-column nav-pills">
+          <!-- <ul class="nav flex-column nav-pills">
             <% outcomes.forEach(function(outcome){ %>
             <li class="nav-item">
               <a class="nav-link <%= outcome.Outcome==selPromise?'active':''%>"
                 href="promises?Outcome=<%=outcome.Outcome%>"><%= outcome.Outcome %></a></li>
             <% }) %>
-          </ul>
+          </ul> -->
         </div>
         <div class="col-md-10 px-0">
           <div class="col-md-12 ml-0">
             <% updates.forEach(function(update){ %>
 
-            <%= console.log(update)%>
-
             <div class="card mb-2">
               <div class="card-body">
                 <div class="card-title h6">
-                  <div class="text-primary"><span><%= update.Title %><br><br></span></div>
+                  <div>
+                    <% if (update.Status=="Done"){ %>
+                    <button type="button" class="btn round btn-success">
+                      <%= update['Status']%>
+                    </button>
+                    <%}%>
+                    <% if (update.Status=="In Progress") { %>
+                    <button type="button" class="btn round btn-warning">
+                      <%= update['Status']%>
+                    </button>
+                    <%}%>                    
+                    <% if (update.Status=="Started") { %>
+                    <button type="button" class="btn round btn-primary">
+                      <%= update['Status']%>
+                    </button>
+                    <%}%>
+                    <span class="text-primary text-center h4"><%= update.Title %><br><br></span>
+                  </div>
                   <span>
-                    <%= update.Description %> <br><br><br>
-                    <pre><%= update['Status']%></pre><a href="<%= update['Proof URL'] %>">Link</a></span>
-                  <h6> <span></span>
+                    <% update.Description.split('\n').forEach(function(line) { %>
+                    <p><%= line %></p>
+                    <%})%>
+                    <br><br>
+                  </span>
+                  <span>
+                    <a href="<%= update['Proof URL'] %>">Proof</a></span>
                 </div>
               </div>
             </div>
