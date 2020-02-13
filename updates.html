@@ -36,7 +36,7 @@
             <div class="card mb-2">
               <div class="card-body">
                 <div class="card-title h6">
-                  <div>
+                  <div class="d-flex justify-content-around">
                     <% if (update.Status=="Done"){ %>
                     <button type="button" class="btn round btn-success">
                       <%= update['Status']%>
@@ -52,16 +52,20 @@
                       <%= update['Status']%>
                     </button>
                     <%}%>
-                    <span class="text-primary text-center h4"><%= update.Title %><br><br></span>
-                  </div>
-                  <span>
-                    <% update.Description.split('\n').forEach(function(line) { %>
-                    <p><%= line %></p>
-                    <%})%>
+                    <span class="text-primary text-center h4"><%= update.Title %></span>
+                    <span><%= new Date(update['Date of Update']).toISOString().split('T')[0] %></span>
                     <br><br>
-                  </span>
-                  <span>
-                    <a href="<%= update['Proof URL'] %>">Proof</a></span>
+                  </div>
+                  <div>
+                    <span>
+                      <% update.Description.split('\n').forEach(function(line) { %>
+                      <p><%= line %></p>
+                      <%})%>
+                      <br><br>
+                    </span>
+                    <span>
+                      <a href="<%= update['Proof URL'] %>">Proof</a></span></div>
+
                 </div>
               </div>
             </div>
@@ -81,10 +85,11 @@
     $(function () {
       url = g1.url.parse(window.location)
       let selPromise = url.searchKey.Promise || ''
+      let selSubPromise = url.searchKey.SubPromise || ''
       $.when(
         $.getJSON('data/outcomes?_sort=Outcome'),
         $.getJSON(`data/promises?Promise=${selPromise}`),
-        $.getJSON(`data/updates?Promise=${selPromise}&_sort=Timestamp`)
+        $.getJSON(`data/updates?Promise=${selPromise}&SubPromise=${selSubPromise}&_sort=Date of Update`)
         // $.getJSON('data/updates?_by=Promise&_c=Promise|count')
         // $.get('data/updates')
       ).done(function (outcomes, promises, updates) {
@@ -96,7 +101,6 @@
             promiseCollector[o.Promise] = [o['Sub promise']]
         })
 
-        console.log(updates[0])
         $('body').template({
           outcomes: outcomes[0],
           promises: promiseCollector,

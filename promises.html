@@ -36,13 +36,13 @@
               <div class="card-body">
                 <div class="card-title h4 text-primary text-shadow">
                   <button type="button" class="btn btn-primary round"><span class="badge badge-light round">2</span> Updates</button>
-                  <span><%= promise.toUpperCase() %></span>
+                 <a href="updates?Promise=<%= promise %>"> <span><%= promise.toUpperCase() %></span> </a>
                 </div>
                 <ul class="list-group list-group-flush">
                   <% promises[promise].forEach(function(subPromise){ %>
                   <li class="list-group-item">
                     <button type="button" class="btn btn-primary round"><span class="badge badge-light round">1</span> Updates</button>
-                    <span><%=subPromise%></span>
+                   <a href="updates?SubPromise=<%= subPromise %>"> <span><%=subPromise%></span> </a>
                   </li>
                   <% }) %>
                 </ul>

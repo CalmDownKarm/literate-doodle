@@ -53,6 +53,8 @@ url:
     handler: FormHandler
     kwargs:
       url: $YAMLPATH/assets/data/updates.xlsx
+      json:
+        date_format: iso  
   # TODO: ADD a scheduled job that syncs updates from the google sheets
 
 # Gramex init configurations for app: aaptracker_new
