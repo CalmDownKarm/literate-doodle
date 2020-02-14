@@ -24,6 +24,10 @@
   height: 75%;
 }
 
+.pill-ki-height {
+  height: 100
+}
+
 /* custom styles for app: aaptracker_new */
 .card-columns {
   @include media-breakpoint-only(md){

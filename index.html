@@ -16,8 +16,8 @@
   <div class="container-fluid">
     {%include banner.html %}
     <div class="nav nav-row py-1">
-      <div class="h3 col-md-4 text-center mx-auto" id="outcomeTab">Explore by Outcome</div>
-      <div class="h3 col-md-4 text-center mx-auto" id="departmentTab">Explore by Department</div>
+      <div class="h3 col-md-4 text-center mx-auto" id="outcomeTab"> <button>Explore by Outcome</button> </div>
+      <div class="h3 col-md-4 text-center mx-auto" id="departmentTab"><button>Explore by Department</button></div>
     </div>
 
     <div class="d-flex flex-wrap justify-content-center">
@@ -69,10 +69,10 @@
     $('#departmentTab').click(function(){
       $.when(
         $.get('data/department?_sort=Department'),
-        $.get('data/promises?_by=Department&_c=Department|count')
-        // $.get('data/updates')
-      ).done(function (outcomes, promises) {
-        output = _.merge(outcomes, promises)
+        $.get('data/promises?_by=Department&_c=Department|count'),
+        $.get('data/updates?_by=Department&_c=Department|count')
+      ).done(function (outcomes, promises, updates) {
+        output = _.merge(outcomes, promises, updates)
         console.log(output)
         $('body').template({outcomes:output[0]})
       })
