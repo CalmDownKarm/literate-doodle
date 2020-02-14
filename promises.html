@@ -36,14 +36,13 @@
               <div class="card-body">
                 <div class="card-title h4 text-primary text-shadow">
                   <button type="button" class="btn btn-primary round"><span class="badge badge-light round">
-                      <%//%> <!-- TODO Bug here. Cant find number of updates in numberOfUpdates -->
-                      <%=numberOfUpdates[promise]%>
+                      <%= promises[promise]['updateCountByPromise']%>
                     </span>
                     Updates</button>
                   <a href="updates?Promise=<%= promise %>"> <span><%= promise.toUpperCase() %></span> </a>
                 </div>
                 <ul class="list-group list-group-flush">
-                  <% promises[promise].forEach(function(subPromise){ %>
+                  <% promises[promise]['subPromises'].forEach(function(subPromise){ %>
                   <li class="list-group-item">
                     <button type="button" class="btn btn-primary round"><span class="badge badge-light round">1</span>
                       Updates</button>
@@ -70,46 +69,27 @@
       $.when(
         $.getJSON('data/outcomes?_sort=Outcome'),
         $.getJSON(`data/promises?Outcome=${selOutcome}`),
-        // $.getJSON('data/updates?_by=Promise&_c=Promise|count')
+        $.getJSON('data/updates?_by=Promise&_c=Promise|count')
         // $.get('data/updates')
-      ).done(function (outcomes, promises, updateCounts) {
+      ).done(function (outcomes, promises, updateCountsByPromise) {
         var promiseCollector = {}
-        var allPromises = {}
-
-        var getJSON = function (url, callback) {
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET', url, true);
-          xhr.responseType = 'json';
-          xhr.onload = function () {
-            var status = xhr.status;
-            if (status === 200) {
-              callback(null, xhr.response);
-            } else {
-              callback(status, xhr.response);
-            }
-          };
-          xhr.send();
-        };
-
+        var updateNumber = 0
         promises[0].forEach(function (o) {
           if (o.Promise in promiseCollector)
-            promiseCollector[o.Promise].push(o['Sub promise'])
-          else
-            promiseCollector[o.Promise] = [o['Sub promise']]
-
-          if (o.Promise in allPromises) {
+            promiseCollector[o.Promise]['subPromises'].push(o['Sub promise'])
+          else {
+            // dont ask how, it just works
+            updateCountsByPromise[0].forEach(function (updateCountOG) {
+              if (updateCountOG.Promise == o.Promise)
+                updateNumber = updateCountOG['Promise|count']
+            })
+            promiseCollector[o.Promise] = { 'subPromises': [o['Sub promise']], 'updateCountByPromise': updateNumber }
+            updateNumber = 0
 
           }
-          else
-            getJSON(`data/updates?Promise=${o.Promise}`, function (err, data) {
-              if (err == null)
-                allPromises[o.Promise] = data == null ? 0 : data.length
-
-            })
-
         })
 
-        // console.log(allPromises)
+        console.log(promiseCollector)
 
 
 
@@ -118,7 +98,6 @@
           outcomes: outcomes[0],
           promises: promiseCollector,
           selOutcome: selOutcome,
-          numberOfUpdates: allPromises,
         })
       })
 
