@@ -34,19 +34,68 @@
             <% Object.keys(promises).forEach(function(promise){ %>
             <div class="card mb-2">
               <div class="card-body">
-                <div class="card-title h4 text-primary text-shadow">
-                  <button type="button" class="btn btn-primary round"><span class="badge badge-light round">
-                      <%= promises[promise]['updateCountByPromise']%>
+                <div class="card-title h4 text-primary text-shadow d-flex flex-row">
+
+                  <div class="mr-1 text-center">
+                    <span>
+                      <button type="button" class="btn btn-success round">
+                        <span
+                          class="badge badge-light round"><%= promises[promise]['Done']!=null?promises[promise]['Done']:0%></span>
+                      </button>
                     </span>
-                    Updates</button>
+                    <span>
+                      <button type="button" class="btn btn-warning round">
+                        <span
+                          class="badge badge-light round"><%= promises[promise]['In Progress']!=null?promises[promise]['In Progress']:0 %></span>
+                      </button>
+                    </span>
+                    <span>
+                      <button type="button" class="btn btn-primary round">
+                        <span
+                          class="badge badge-light round"><%= promises[promise]['Started']!=null?promises[promise]['Started']:0%></span>
+                      </button>
+                    </span>
+                    <span>
+                      <button type="button" class="btn btn-danger round">
+                        <span
+                          class="badge badge-light round"><%= promises[promise]['Not Started']!=null?promises[promise]['Not Started']:0%></span>
+                      </button>
+                    </span>
+                  </div>
+
+
                   <a href="updates?Promise=<%= promise %>"> <span><%= promise.toUpperCase() %></span> </a>
                 </div>
                 <ul class="list-group list-group-flush">
                   <% promises[promise]['subPromises'].forEach(function(subPromise){ %>
                   <li class="list-group-item">
-                    <button type="button" class="btn btn-primary round"><span class="badge badge-light round">1</span>
-                      Updates</button>
+
                     <a href="updates?SubPromise=<%= subPromise %>"> <span><%=subPromise%></span> </a>
+                    <span>
+                      <button type="button" class="btn btn-success round">
+                        <span
+                          class="badge badge-light round" ><%= subPromises[subPromise]['Done']!=null?subPromises[subPromise]['Done']:0%></span>
+
+                      </button>
+                    </span>
+                    <span>
+                      <button type="button" class="btn btn-warning round">
+                        <span
+                          class="badge badge-light round"><%= subPromises[subPromise]['In Progress']!=null?subPromises[subPromise]['In Progress']:0 %></span>
+                      </button>
+                    </span>
+                    <span>
+                      <button type="button" class="btn btn-primary round">
+                        <span
+                          class="badge badge-light round"><%= subPromises[subPromise]['Started']!=null?subPromises[subPromise]['Started']:0%></span>
+                      </button>
+                    </span>
+                    <span>
+                      <button type="button" class="btn btn-danger round">
+                        <span
+                          class="badge badge-light round"><%= subPromises[subPromise]['Not Started']!=null?subPromises[subPromise]['Not Started']:0%></span>
+                      </button>
+                    </span>
                   </li>
                   <% }) %>
                 </ul>
@@ -69,35 +118,44 @@
       $.when(
         $.getJSON('data/outcomes?_sort=Outcome'),
         $.getJSON(`data/promises?Outcome=${selOutcome}`),
-        $.getJSON('data/updates?_by=Promise&_c=Promise|count')
+        $.getJSON('data/updates?_by=Promise&_by=Status&_c=Status|count'),
+        $.getJSON('data/updates?_by=SubPromise&_by=Status&_c=Status|count')
         // $.get('data/updates')
-      ).done(function (outcomes, promises, updateCountsByPromise) {
+      ).done(function (outcomes, promises, updateStatusByPromise, updateStatusBySubPromise) {
         var promiseCollector = {}
-        var updateNumber = 0
+        var subPromiseCollector = {}
+
         promises[0].forEach(function (o) {
           if (o.Promise in promiseCollector)
             promiseCollector[o.Promise]['subPromises'].push(o['Sub promise'])
           else {
-            // dont ask how, it just works
-            updateCountsByPromise[0].forEach(function (updateCountOG) {
-              if (updateCountOG.Promise == o.Promise)
-                updateNumber = updateCountOG['Promise|count']
-            })
-            promiseCollector[o.Promise] = { 'subPromises': [o['Sub promise']], 'updateCountByPromise': updateNumber }
-            updateNumber = 0
-
+            promiseCollector[o.Promise] = { 'subPromises': [o['Sub promise']] }
           }
         })
 
-        console.log(promiseCollector)
+        updateStatusByPromise[0].forEach(function (statusCount) {
+          promiseCollector[statusCount.Promise][statusCount.Status] = statusCount['Status|count']
+        })
+
+        promises[0].forEach(function (subPromiseAdd) {
+          subPromiseCollector[subPromiseAdd['Sub promise']] = {}
+        })
+
+        updateStatusBySubPromise[0].forEach(function (statusCount) {
+
+          if (statusCount.SubPromise in subPromiseCollector)
+            subPromiseCollector[statusCount.SubPromise][statusCount.Status] = statusCount['Status|count']
+        })
 
 
 
-        // console.log(promises[0])
+
+        console.log(subPromiseCollector)
         $('body').template({
           outcomes: outcomes[0],
           promises: promiseCollector,
           selOutcome: selOutcome,
+          subPromises: subPromiseCollector
         })
       })
 

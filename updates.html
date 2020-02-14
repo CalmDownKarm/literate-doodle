@@ -49,11 +49,16 @@
                         <%= update['Status']%>
                       </button>
                       <%}%>                    
-                        <% if (update.Status=="Started") { %>
-                      <button type="button" class="btn round btn-primary">
-                        <%= update['Status']%>
-                      </button>
-                      <%}%>
+                      <% if (update.Status=="Started") { %>
+                        <button type="button" class="btn round btn-primary">
+                          <%= update['Status']%>
+                        </button>
+                        <%}%>                       
+                         <% if (update.Status=="Not Started") { %>
+                          <button type="button" class="btn round btn-danger">
+                            <%= update['Status']%>
+                          </button>
+                          <%}%>
 
                     </div>
 
@@ -64,7 +69,7 @@
                     </div>
                     <div>
                       <span>
-                        <% update.Description.split('\n').forEach(function(line) { %>
+                        <% update.Description == null? '' : update.Description.split('\n').forEach(function(line) { %>
                         <p><%= line %></p>
                         <%})%>
                         <br><br>
@@ -75,8 +80,6 @@
                   </div>
                 </div>
               </div>
-
-
               <% }) %>
             </div>
     </template>
@@ -103,7 +106,7 @@
       $.when(
         $.getJSON('data/outcomes?_sort=Outcome'),
         $.getJSON(`data/promises?Promise=${selPromise}`),
-        $.getJSON(`data/updates?Promise=${selPromise}&SubPromise=${selSubPromise}&_sort=Date of Update`)
+        $.getJSON(`data/updates?Promise=${selPromise}&SubPromise=${selSubPromise}&_sort=-Date of Update`)
         // $.getJSON('data/updates?_by=Promise&_c=Promise|count')
         // $.get('data/updates')
       ).done(function (outcomes, promises, updates) {
