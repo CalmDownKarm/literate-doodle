@@ -3,8 +3,6 @@
 
 # Don't commit the assets/ folder except for the README.md file
 # Store them in a shared folder and sync here.
-assets/**
-!assets/README*
 
 # Ignore npm and bower modules. These should be created by yarn/npm and bower.
 node_modules/
