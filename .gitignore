@@ -31,7 +31,6 @@ __pycache__/
 *.doc*
 *.pdf
 *.ppt*
-*.xls*
 
 # Avoid media files
 *.avi
