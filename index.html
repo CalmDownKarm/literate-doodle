@@ -15,33 +15,43 @@
   <!-- TODO: Filter bars -->
   <div class="container-fluid">
     {%include banner.html %}
-    <div class="nav nav-row pt-2 pb-1 mb-0 nav_buttons">
-      <div class="col-md-4 text-center mx-auto"> <a class="btn btn-primary btn-block h1 text-white"
-          data-target="Outcome">Explore by Outcome</a> </div>
-      <div class="col-md-4 text-center mx-auto"><a class="btn btn-primary btn-block h1 text-white"
-          data-target="Department">Explore by Department</a></div>
-    </div>
-
-    <div class="d-flex flex-wrap justify-content-center">
-      <template>
-        <% outcomes.forEach(function(outcome){ %>
-        <div class="card col-md-3 px-0">
-          <img class="card-img-top img-fluid image-ka-size-hai-ye" src="<%= outcome.img %>">
-          <div class="card-body">
-            <h5 class="card-title"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></h5>
-            <a href="promises?Outcome=<%= outcome.Outcome %>">
-              <p class="card-text">
-                <%= outcome['Promise|count']%> Promises</p>
-            </a>
-            <a href="updates?Outcome=<%= outcome.Outcome %>">
-              <p class="card-text">
-                <%= outcome['Update|count']  %> Updates</p>
-            </a>
-          </div>
+    <div class="row-fluid">
+      <div class="sidebar col-md-2 d-flex flex-column">
+        <div>Some crap here</div>
+        <div>some more crap here</div>
+      </div> <!-- sidebar-->
+      <div class="main_content">
+        <div class="nav nav-row pt-2 pb-1 mb-0 nav_buttons">
+          <div class="col-md-4 text-center mx-auto"> <a class="btn btn-primary btn-block h1 text-white"
+              data-target="Outcome">Explore by Outcome</a> </div>
+          <div class="col-md-4 text-center mx-auto"><a class="btn btn-primary btn-block h1 text-white"
+              data-target="Department">Explore by Department</a></div>
+        </div><!--nav-buttons-->
+        <div class="d-flex flex-wrap justify-content-around">
+          <template>
+            <% outcomes.forEach(function(outcome){ %>
+            <div class="card col-md-2 px-0">
+              <img class="card-img-top img-fluid image-ka-size-hai-ye" src="<%= outcome.img %>">
+              <div class="card-body">
+                <h5 class="card-title"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></h5>
+                <a href="promises?Outcome=<%= outcome.Outcome %>">
+                  <p class="card-text">
+                    <%= outcome['Promise|count']%> Promises</p>
+                </a>
+                <a href="updates?Outcome=<%= outcome.Outcome %>">
+                  <p class="card-text">
+                    <%= outcome['Update|count']  %> Updates</p>
+                </a>
+              </div>
+            </div>
+            <% }) %>
+          </template>
         </div>
-        <% }) %>
-      </template>
-    </div>
+      </div><!--main-content-->
+    </div><!--row-fluid-->
+
+
+
   </div> <!-- .container-fluid -->
 
   <script src="ui/jquery/dist/jquery.min.js"></script>
@@ -53,8 +63,8 @@
     function draw_cards(field) {
       // Look up the appropriate set of urls and render the template
       let url = [`data/${field.toLowerCase()}?_sort=${field}`,
-          `data/promises?_by=${field}&_c=${field}|count`,
-          `data/updates?_by=${field}&_c=${field}|count`]
+      `data/promises?_by=${field}&_c=${field}|count`,
+      `data/updates?_by=${field}&_c=${field}|count`]
       $.when(
         $.getJSON(url[0]),
         $.getJSON(url[1]),
