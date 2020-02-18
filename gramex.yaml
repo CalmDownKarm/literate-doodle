@@ -31,7 +31,7 @@ url:
       url: $YAMLPATH/assets/data/Promises.xlsx
 
   aaptracker-outcomes-form:
-    pattern: /$YAMLURL/data/outcomes
+    pattern: /$YAMLURL/data/outcome
     handler: FormHandler
     kwargs:
       url: $YAMLPATH/assets/data/Outcomes.xlsx
@@ -54,7 +54,7 @@ url:
     kwargs:
       url: $YAMLPATH/assets/data/updates.xlsx
       json:
-        date_format: iso  
+        date_format: iso
   # TODO: ADD a scheduled job that syncs updates from the google sheets
 
 # Gramex init configurations for app: aaptracker_new
