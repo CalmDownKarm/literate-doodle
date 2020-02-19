@@ -17,9 +17,12 @@
     {%include banner.html %}
     <div class="d-flex flex-row">
       <div class="sidebar col-md-3 d-flex flex-column">
-        <div class="h1  text-primary mt-2 mx-auto">UPDATES</div>
-        <div id="chart" class="mx-auto"></div>
-        <div>some more crap here</div>
+        <div class="h2  text-primary mt-2 mx-auto">Updates</div>
+        <div id="donutChart" class="mx-auto"></div>
+        <div class="h2 text-primary mt-2 mx-auto">Top Departments</div>
+        <div id="departmentChart" class="mx-auto"></div>
+        <div class="h2 text-primary mt-2 mx-auto">Top Outcomes</div>
+        <div id="outcomeChart" class="mx-auto"></div>
       </div> <!-- sidebar-->
       <div class="main_content">
         <div class="nav nav-row pt-2 pb-1 mb-0 nav_buttons">
@@ -64,7 +67,25 @@
   <script src="ui/g1/dist/g1.min.js"></script>
   <script src="ui/vega/build/vega.min.js"></script>
   <script src="js/donut.js"></script>
+  <script src="js/marimeko.js"></script>
   <script>
+    function getDataM(){
+      $.getJSON('data/updates?_by=Department&_by=Status&_c=Status|count').done(function(data){
+        debugger
+        console.log(_.groupby(data, 'Department'))
+      })
+    }
+    function renderVega(spec, field, data=null) {
+      if(data){ // for the marimekko chart, data needs to be passed explicitly.
+        spec.data.values = data
+      }
+      var view = new vega.View(vega.parse(spec))
+        .renderer('svg')
+        .logLevel(vega.Warn)
+        .initialize(field)
+        .hover()
+        .run()
+    }
     function draw_cards(field) {
       // Look up the appropriate set of urls and render the template
       let url = [`data/${field.toLowerCase()}?_sort=${field}`,
@@ -79,25 +100,19 @@
         updates = _.each(updates[0], function (obj) { obj['Update|count'] = obj[`${field}|count`] })
         group = group[0]
         outputs = _.merge(group, promises, updates)
-        console.log(outputs)
+        // console.log(outputs)
         $('body').template({ outcomes: outputs })
       })
     }
+
     $(function () {
-      var view = new vega.View(vega.parse(donutSpec))
-        .renderer('svg')
-        .logLevel(vega.Warn)
-        .initialize('#chart')
-        .hover()
-        .run()
-
-
-
+      getDataM()
+      renderVega(donutSpec, '#donutChart')
       draw_cards('Outcome')
       $('.nav_buttons').on('click', function (button) {
         draw_cards($(button.target).data('target'))
-
       })
+      getDataM()
     })
   </script>
   <!-- Commonly used libraries:
