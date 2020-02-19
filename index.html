@@ -13,11 +13,12 @@
   {% set base = '.' %}
   {% include template-navbar.html %}
   <!-- TODO: Filter bars -->
-  <div class="container-fluid">
+  <div class="container-fluid px-0">
     {%include banner.html %}
-    <div class="row-fluid">
-      <div class="sidebar col-md-2 d-flex flex-column">
-        <div>Some crap here</div>
+    <div class="d-flex flex-row">
+      <div class="sidebar col-md-3 d-flex flex-column">
+        <div class="h1  text-primary mt-2 mx-auto">UPDATES</div>
+        <div id="chart" class="mx-auto"></div>
         <div>some more crap here</div>
       </div> <!-- sidebar-->
       <div class="main_content">
@@ -26,7 +27,8 @@
               data-target="Outcome">Explore by Outcome</a> </div>
           <div class="col-md-4 text-center mx-auto"><a class="btn btn-primary btn-block h1 text-white"
               data-target="Department">Explore by Department</a></div>
-        </div><!--nav-buttons-->
+        </div>
+        <!--nav-buttons-->
         <div class="d-flex flex-wrap justify-content-around">
           <template>
             <% outcomes.forEach(function(outcome){ %>
@@ -47,8 +49,10 @@
             <% }) %>
           </template>
         </div>
-      </div><!--main-content-->
-    </div><!--row-fluid-->
+      </div>
+      <!--main-content-->
+    </div>
+    <!--row-fluid-->
 
 
 
@@ -57,8 +61,9 @@
   <script src="ui/jquery/dist/jquery.min.js"></script>
   <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="ui/lodash/lodash.min.js"></script>
-  <Fieldset></Fieldset>
   <script src="ui/g1/dist/g1.min.js"></script>
+  <script src="ui/vega/build/vega.min.js"></script>
+  <script src="js/donut.js"></script>
   <script>
     function draw_cards(field) {
       // Look up the appropriate set of urls and render the template
@@ -79,6 +84,15 @@
       })
     }
     $(function () {
+      var view = new vega.View(vega.parse(donutSpec))
+        .renderer('svg')
+        .logLevel(vega.Warn)
+        .initialize('#chart')
+        .hover()
+        .run()
+
+
+
       draw_cards('Outcome')
       $('.nav_buttons').on('click', function (button) {
         draw_cards($(button.target).data('target'))
