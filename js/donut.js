@@ -1,10 +1,9 @@
 var donutSpec={
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "todo",
-  "width": "250",
-  "height": "250",
-  "padding": 5,
-  "autosize": { "type": "fit", "contains": "padding" },
+  "width": "200",
+  "height": "200",
+  "autosize": { "type": "fit", "contains": "padding", "resize":true },
   "signals": [{ "name": "radius", "update": "min(width, height)" }],
   "data": [
     {

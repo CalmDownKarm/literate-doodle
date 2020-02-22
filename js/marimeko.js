@@ -2,10 +2,9 @@ function getMarimekkoSpec(field){
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "todo",
-    "width": 390,
-    "height": 250,
-    "padding": 5,
-    "autosize": {"type": "fit", "contains": "padding"},
+    "width": 250,
+    "height": 200,
+    "autosize": {"type": "fit", "contains": "padding", 'resize':"true"},
     "data": [
       {
         "name": "table",
