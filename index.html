@@ -16,7 +16,7 @@
   <div class="container-fluid px-0">
     {%include banner.html %}
     <div class="d-flex flex-row">
-      <div class="sidebar col-md-3 d-flex flex-column">
+      <div class="sidebar col-md-4 d-flex flex-column">
         <div class="h2  text-primary mt-2 mx-auto">Updates</div>
         <div id="donutChart" class="mx-auto"></div>
         <div class="h2 text-primary mt-2 mx-auto">Top Departments</div>
@@ -35,7 +35,7 @@
         <div class="d-flex flex-wrap justify-content-around">
           <template>
             <% outcomes.forEach(function(outcome){ %>
-            <div class="card col-md-2 px-0">
+            <div class="card col-md-4 px-0">
               <img class="card-img-top img-fluid image-ka-size-hai-ye" src="<%= outcome.img %>">
               <div class="card-body">
                 <h5 class="card-title"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></h5>
@@ -69,15 +69,19 @@
   <script src="js/donut.js"></script>
   <script src="js/marimeko.js"></script>
   <script>
-    function getDataM(){
-      $.getJSON('data/updates?_by=Department&_by=Status&_c=Status|count').done(function(data){
-        debugger
-        console.log(_.groupby(data, 'Department'))
+    function getDataM() {
+      $.when(
+        $.getJSON('data/updates?_by=Department&_c=Department|count&_sort=-Department|count&_limit=5'),
+        $.getJSON('data/updates?_by=Department&_by=Status&_c=Status|count')
+      ).done(function (departments, updates) {
+        var departments = departments[0].map(d => d.Department)
+        filteredUpdates = updates[0].filter(u => departments.includes(u.Department))
+        renderVega(marimekkoSpec, '#departmentChart', filteredUpdates)
       })
     }
-    function renderVega(spec, field, data=null) {
-      if(data){ // for the marimekko chart, data needs to be passed explicitly.
-        spec.data.values = data
+    function renderVega(spec, field, data = null) {
+      if (data) { // for the marimekko chart, data needs to be passed explicitly.
+        spec.data[0].values = data
       }
       var view = new vega.View(vega.parse(spec))
         .renderer('svg')
