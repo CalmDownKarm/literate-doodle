@@ -69,14 +69,14 @@
   <script src="js/donut.js"></script>
   <script src="js/marimeko.js"></script>
   <script>
-    function getDataM() {
+    function getDataM(aggregator='Department', container='#departmentChart') {
       $.when(
-        $.getJSON('data/updates?_by=Department&_c=Department|count&_sort=-Department|count&_limit=5'),
-        $.getJSON('data/updates?_by=Department&_by=Status&_c=Status|count')
+        $.getJSON(`data/updates?_by=${aggregator}&_c=${aggregator}|count&_sort=-${aggregator}|count&_limit=5`),
+        $.getJSON(`data/updates?_by=${aggregator}&_by=Status&_c=Status|count`)
       ).done(function (departments, updates) {
-        var departments = departments[0].map(d => d.Department)
-        filteredUpdates = updates[0].filter(u => departments.includes(u.Department))
-        renderVega(marimekkoSpec, '#departmentChart', filteredUpdates)
+        var departments = departments[0].map(d => d[aggregator])
+        filteredUpdates = updates[0].filter(u => departments.includes(u[aggregator]))
+        renderVega(getMarimekkoSpec(aggregator), container, filteredUpdates)
       })
     }
     function renderVega(spec, field, data = null) {
@@ -110,13 +110,13 @@
     }
 
     $(function () {
-      getDataM()
+      getDataM('Department', '#departmentChart')
+      getDataM('Outcome', '#outcomeChart')
       renderVega(donutSpec, '#donutChart')
       draw_cards('Outcome')
       $('.nav_buttons').on('click', function (button) {
         draw_cards($(button.target).data('target'))
       })
-      getDataM()
     })
   </script>
   <!-- Commonly used libraries:
