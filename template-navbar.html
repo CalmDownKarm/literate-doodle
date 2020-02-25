@@ -1,24 +1,31 @@
-<nav class="navbar navbar-expand-lg navbar-white bg-dark py-0">
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark py-0 d-flex flex-row justify-content-between">
   <a class="navbar-brand" href="{{ base }}">
     <!-- Replace with your logo. Just specify height, not width. -->
-    <img height="50" src="assets/images/aap-logo-new.png" alt="Logo">
+    <img height="36"
+      src="assets/images/aap-logo-new.png"
+      alt="Logo">
+    <span class="text-uppercase"></span>
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <!-- Navbar left -->
 
-    <!-- Navbar middle -->
-
-    <!-- Navbar right -->
+  <div class="navbar-nav mr-2">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link h5" href="{{ base }}/updates">Updates</a></li>
-      </li>
       <li class="nav-item">
         <a class="nav-link h5" href="{{ base }}/promises">Promises</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link h5" href="{{ base }}?show=outcomes">Outcomes</a></li>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link h5" href="{{ base }}?show=departments">Departments</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link h5" href="{{ base }}/contact">Contact</a>
+      </li>
     </ul>
   </div>
+
 </nav>

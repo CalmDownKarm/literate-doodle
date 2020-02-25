@@ -16,7 +16,7 @@
   <div class="container-fluid px-0 bg-dark">
     {%include banner.html %}
     <div class="row">
-      <div class="sidebar col-xs-4 col-md-4 px-0">
+      <div class="sidebar col-xs-12 col-md-3 px-0">
         <div class="h2  text-primary mt-2 mx-auto">Updates</div>
         <div id="donutChart" class="mx-auto"></div>
         <div class="h2 text-primary mt-2 mx-auto">Top Departments</div>
@@ -24,7 +24,7 @@
         <div class="h2 text-primary mt-2 mx-auto">Top Outcomes</div>
         <div id="outcomeChart" class="mx-auto"></div>
       </div> <!-- sidebar-->
-      <div class="main col-sm-8 px-0">
+      <div class="main col-xs-12 col-md-9 px-0" id="main">
         <div class="nav nav-row pt-2 pb-1 mb-0 nav_buttons">
           <div class="col-md-4 text-center mx-auto"> <a class="btn btn-primary btn-block h1 text-white"
               data-target="Outcome">Explore by Outcome</a> </div>
@@ -32,23 +32,26 @@
               data-target="Department">Explore by Department</a></div>
         </div>
         <!--nav-buttons-->
-        <div class="d-flex flex-wrap justify-content-around">
+        <div class="d-flex flex-wrap justify-content-between px-0">
           <template>
             <% outcomes.forEach(function(outcome){ %>
-            <div class="card col-md-4 px-0">
-              <img class="card-img-top img-fluid image-ka-size-hai-ye" src="<%= outcome.img %>">
-              <div class="card-body">
-                <h5 class="card-title"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></h5>
-                <a href="promises?Outcome=<%= outcome.Outcome %>">
-                  <p class="card-text">
-                    <%= outcome['Promise|count']%> Promises</p>
-                </a>
-                <a href="updates?Outcome=<%= outcome.Outcome %>">
-                  <p class="card-text">
-                    <%= outcome['Update|count']  %> Updates</p>
-                </a>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 px-0">
+              <div class="hovereffect">
+                <img class="img-fluid" src="<%= outcome.img %>">
+                <div class="overlay">
+                  <h2 class="text-shadow"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></h2>
+                  <a href="promises?Outcome=<%= outcome.Outcome %>">
+                    <p class="card-text">
+                      <%= outcome['Promise|count']%> Promises</p>
+                  </a>
+                  <a href="updates?Outcome=<%= outcome.Outcome %>">
+                    <p class="card-text">
+                      <%= outcome['Update|count']  %> Updates</p>
+                  </a>
+                </div>
               </div>
             </div>
+
             <% }) %>
           </template>
         </div>
@@ -69,7 +72,7 @@
   <script src="js/donut.js"></script>
   <script src="js/marimeko.js"></script>
   <script>
-    function getDataM(aggregator='Department', container='#departmentChart') {
+    function getDataM(aggregator = 'Department', container = '#departmentChart') {
       $.when(
         $.getJSON(`data/updates?_by=${aggregator}&_c=${aggregator}|count&_sort=-${aggregator}|count&_limit=5`),
         $.getJSON(`data/updates?_by=${aggregator}&_by=Status&_c=Status|count`)
