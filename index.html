@@ -68,74 +68,85 @@
         </div>
       </div>
       <!--main-content-->
-      <div class="row bg-primary">
-        <!--footer-->
-        HERE IS THE FOOTER
-      </div>
+    </div>
+    <div class="row bg-primary">
       <!--footer-->
-    </div> <!-- container-fluid -->
+      <div class="col-md-4 Partner">
+        <div class="text-white font-weight-bold h5">
+          Partner Links
+        </div>
+        <div class="text-white">Aam Aadmi Party</div>
+        <div class="text-white">Delhi Dialogue</div>
+        <div class="text-white">CCN</div>
+      </div>
+      <div class="col-md-4 Social">
+        <div class="text-white font-weight-bold h5"></div>
+      </div>
+    </div>
+    <!--footer-->
+  </div> <!-- container-fluid -->
 
 
 
-    <script src="ui/jquery/dist/jquery.min.js"></script>
-    <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="ui/lodash/lodash.min.js"></script>
-    <script src="ui/g1/dist/g1.min.js"></script>
-    <script src="ui/vega/build/vega.min.js"></script>
-    <script src="js/donut.js"></script>
-    <script src="js/marimeko.js"></script>
-    <script>
-      function getDataM(aggregator = 'Department', container = '#departmentChart') {
-        $.when(
-          $.getJSON(`data/updates?_by=${aggregator}&_c=${aggregator}|count&_sort=-${aggregator}|count&_limit=5`),
-          $.getJSON(`data/updates?_by=${aggregator}&_by=Status&_c=Status|count`)
-        ).done(function (departments, updates) {
-          var departments = departments[0].map(d => d[aggregator])
-          filteredUpdates = updates[0].filter(u => departments.includes(u[aggregator]))
-          renderVega(getMarimekkoSpec(aggregator), container, filteredUpdates)
-        })
-      }
-      function renderVega(spec, field, data = null) {
-        if (data) { // for the marimekko chart, data needs to be passed explicitly.
-          spec.data[0].values = data
-        }
-        var view = new vega.View(vega.parse(spec))
-          .renderer('svg')
-          .logLevel(vega.Warn)
-          .initialize(field)
-          .hover()
-          .run()
-      }
-      function draw_cards(field) {
-        // Look up the appropriate set of urls and render the template
-        let url = [`data/${field.toLowerCase()}?_sort=${field}`,
-        `data/promises?_by=${field}&_c=${field}|count`,
-        `data/updates?_by=${field}&_c=${field}|count`]
-        $.when(
-          $.getJSON(url[0]),
-          $.getJSON(url[1]),
-          $.getJSON(url[2])
-        ).done(function (group, promises, updates) {
-          promises = _.each(promises[0], function (obj) { obj['Promise|count'] = obj[`${field}|count`] })
-          updates = _.each(updates[0], function (obj) { obj['Update|count'] = obj[`${field}|count`] })
-          group = group[0]
-          outputs = _.merge(group, promises, updates)
-          // console.log(outputs)
-          $('body').template({ outcomes: outputs })
-        })
-      }
-
-      $(function () {
-        getDataM('Department', '#departmentChart')
-        getDataM('Outcome', '#outcomeChart')
-        renderVega(donutSpec, '#donutChart')
-        draw_cards('Outcome')
-        $('.nav_buttons').on('click', function (button) {
-          draw_cards($(button.target).data('target'))
-        })
+  <script src="ui/jquery/dist/jquery.min.js"></script>
+  <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="ui/lodash/lodash.min.js"></script>
+  <script src="ui/g1/dist/g1.min.js"></script>
+  <script src="ui/vega/build/vega.min.js"></script>
+  <script src="js/donut.js"></script>
+  <script src="js/marimeko.js"></script>
+  <script>
+    function getDataM(aggregator = 'Department', container = '#departmentChart') {
+      $.when(
+        $.getJSON(`data/updates?_by=${aggregator}&_c=${aggregator}|count&_sort=-${aggregator}|count&_limit=5`),
+        $.getJSON(`data/updates?_by=${aggregator}&_by=Status&_c=Status|count`)
+      ).done(function (departments, updates) {
+        var departments = departments[0].map(d => d[aggregator])
+        filteredUpdates = updates[0].filter(u => departments.includes(u[aggregator]))
+        renderVega(getMarimekkoSpec(aggregator), container, filteredUpdates)
       })
-    </script>
-    <!-- Commonly used libraries:
+    }
+    function renderVega(spec, field, data = null) {
+      if (data) { // for the marimekko chart, data needs to be passed explicitly.
+        spec.data[0].values = data
+      }
+      var view = new vega.View(vega.parse(spec))
+        .renderer('svg')
+        .logLevel(vega.Warn)
+        .initialize(field)
+        .hover()
+        .run()
+    }
+    function draw_cards(field) {
+      // Look up the appropriate set of urls and render the template
+      let url = [`data/${field.toLowerCase()}?_sort=${field}`,
+      `data/promises?_by=${field}&_c=${field}|count`,
+      `data/updates?_by=${field}&_c=${field}|count`]
+      $.when(
+        $.getJSON(url[0]),
+        $.getJSON(url[1]),
+        $.getJSON(url[2])
+      ).done(function (group, promises, updates) {
+        promises = _.each(promises[0], function (obj) { obj['Promise|count'] = obj[`${field}|count`] })
+        updates = _.each(updates[0], function (obj) { obj['Update|count'] = obj[`${field}|count`] })
+        group = group[0]
+        outputs = _.merge(group, promises, updates)
+        // console.log(outputs)
+        $('body').template({ outcomes: outputs })
+      })
+    }
+
+    $(function () {
+      getDataM('Department', '#departmentChart')
+      getDataM('Outcome', '#outcomeChart')
+      renderVega(donutSpec, '#donutChart')
+      draw_cards('Outcome')
+      $('.nav_buttons').on('click', function (button) {
+        draw_cards($(button.target).data('target'))
+      })
+    })
+  </script>
+  <!-- Commonly used libraries:
   <script src="ui/d3v5/dist/d3.min.js"></script>
   <script src="ui/morphdom/dist/morphdom-umd.min.js"></script>
   <script src="ui/moment/min/moment-with-locales.min.js"></script>
