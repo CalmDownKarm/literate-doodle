@@ -14,55 +14,26 @@
   {% include template-navbar.html %}
   <!-- TODO: Filter bars -->
   <div class="bg">
-    <div class="container-fluid h-100">
-      <div class="nav nav-row pt-2 pb-1 mb-0 nav_buttons align-items-end">
-        <div class="col-md-4 text-center mx-auto"> <a class="btn btn-primary btn-block h1 text-white"
-            data-target="Outcome">Explore by Outcome</a> </div>
-        <div class="col-md-4 text-center mx-auto"><a class="btn btn-primary btn-block h1 text-white"
-            data-target="Department">Explore by Department</a></div>
+    <div class="container h-100 px-0">
+      <div class="headertext col-md-4 overlay-black px-0 pos-cr">
+        <p class="h1 text-white text-middle font-weight-bold">Jo Kaha Woh Kiya</p>
+        <p class="h5 text-white">Since Independence, political parties have been making promises to voters, and breaking
+          them later.</p>
+        <p class="h5 text-white">The Aam Aadmi Party is different.</p>
+        <p class="h5 text-white">We deliver what we promise.</p>
+        <p class="h5 text-white">Track our progress.</p>
+      </div>
+      <div class="row pos-bc mb-5">
+        <span class="h1 text-white pt-1">Explore by</span>
+        <a class="btn btn-primary mx-2" data-target="Outcome"><span class="h2 text-white">Outcome</span></a>
+        <a class="btn btn-primary" data-target="Department"><span class="h2 text-white">Department</span></a>
       </div>
       <!--nav-buttons-->
     </div>
   </div>
-  <div class="container-fluid px-0 bg-dark">
-    <div class="row">
-      <div class="sidebar col-xs-12 col-md-3 px-0">
-        <div class="h2  text-primary mt-2 mx-auto">Updates</div>
-        <div id="donutChart" class="mx-auto"></div>
-        <div class="h2 text-primary mt-2 mx-auto">Top Departments</div>
-        <div id="departmentChart" class="mx-auto"></div>
-        <div class="h2 text-primary mt-2 mx-auto">Top Outcomes</div>
-        <div id="outcomeChart" class="mx-auto"></div>
-      </div> <!-- sidebar-->
-      <div class="main col-xs-12 col-md-9 px-0" id="main">
 
-        <div class="d-flex flex-wrap justify-content-around px-0">
-          <template>
-            <% outcomes.forEach(function(outcome){ %>
-            <div class="col-md-2 col-sm-6 col-xs-12 px-0">
-              <div class="hovereffect">
-                <img class="img-fluid" src="<%= outcome.img %>">
-                <div class="overlay">
-                  <h2 class="text-shadow"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></h2>
-                  <a href="promises?Outcome=<%= outcome.Outcome %>">
-                    <p class="card-text">
-                      <%= outcome['Promise|count']%> Promises</p>
-                  </a>
-                  <a href="updates?Outcome=<%= outcome.Outcome %>">
-                    <p class="card-text">
-                      <%= outcome['Update|count']  %> Updates</p>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <% }) %>
-          </template>
-        </div>
-      </div>
-      <!--main-content-->
-    </div>
-    <!--row-fluid-->
+  </div>
+  <!--row-fluid-->
 
 
 
