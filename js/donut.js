@@ -30,7 +30,7 @@ var donutSpec={
       "name": "color",
       "type": "ordinal",
       "domain": { "data": "table", "field": "Status" },
-      "range": ["#1e7e34","#0062cc","#dc3545"]
+      "range": ["#669933","#1D81B2","#CC3300"]
     }
   ],
   "marks": [

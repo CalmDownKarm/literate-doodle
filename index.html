@@ -19,10 +19,10 @@
       <div class="headertext col-md-4 overlay-black px-0 pos-cr">
         <p class="h1 text-white text-middle font-weight-bold">Jo Kaha Woh Kiya</p>
         <p class="h5 text-white">Since Independence, political parties have been making promises to voters, and breaking
-          them later.</p>
-        <p class="h5 text-white">The Aam Aadmi Party is different.</p>
-        <p class="h5 text-white">We deliver what we promise.</p>
-        <p class="h5 text-white">Track our progress.</p>
+          them later.</br>
+          The Aam Aadmi Party is different.</br>
+          We deliver what we promise.</br>
+          Track our progress.</p>
       </div>
       <div class="pos-bc mb-5">
         <p class="h3 text-white">Explore by</p>
@@ -87,7 +87,7 @@
   <script src="ui/g1/dist/g1.min.js"></script>
   <script src="ui/vega/build/vega.min.js"></script>
   <script src="js/donut.js"></script>
-  <script src="js/marimeko.js"></script>
+  <script src="js/bar.js"></script>
   <script>
     function getDataM(aggregator = 'Department', container = '#departmentChart') {
       $.when(
@@ -132,12 +132,11 @@
     }
 
     $(function () {
-      getDataM('Department', '#departmentChart')
-      getDataM('Outcome', '#outcomeChart')
+      renderVega(getBarSpec('Department'), '#departmentChart')
+      renderVega(getBarSpec('Outcome'), '#outcomeChart')
       renderVega(donutSpec, '#donutChart')
       draw_cards('Outcome')
       $('.nav_buttons').on('click', function (button) {
-        console.log($(button.target).data('target'))
         draw_cards($(button.target).data('target'))
       })
     })
