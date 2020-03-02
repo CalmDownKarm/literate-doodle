@@ -25,6 +25,10 @@
 
 
 } */
+html {
+  scroll-behavior: smooth;
+}
+
 body, html{
   height: 100%;
 }
@@ -95,11 +99,12 @@ body, html{
   -webkit-filter: brightness(0.1);
 }
 
-.hovereffect h2 {
+.hovereffect .h3 {
   text-transform: uppercase;
   text-align: center;
   position: relative;
-  font-size: 17px;
+  word-wrap: break-word;
+  font-size: 12px;
   background-color: transparent;
   color: #FFF;
   padding: 1em 0;
@@ -122,7 +127,7 @@ body, html{
   transform: translate3d(0,100%,0);
 }
 
-.hovereffect:hover a, .hovereffect:hover p, .hovereffect:hover h2 {
+.hovereffect:hover a, .hovereffect:hover p, .hovereffect:hover .h3 {
   opacity: 1;
   filter: alpha(opacity=100);
   -webkit-transform: translate3d(0,0,0);

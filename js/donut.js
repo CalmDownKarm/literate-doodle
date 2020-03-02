@@ -62,7 +62,8 @@ var donutSpec={
           "baseline": { "value": "middle" },
           "text": { "signal": "format(datum.total, '.2s')" },
           "fontSize": { "value": 28 },
-          "fontWeight": { "value": "bold" }
+          "fontWeight": { "value": "bold" },
+          "fill":{"value": "#ffffff"}
         }
       }
     }

@@ -24,18 +24,22 @@
         <p class="h5 text-white">We deliver what we promise.</p>
         <p class="h5 text-white">Track our progress.</p>
       </div>
-      <div class="row pos-bc mb-5">
-        <span class="h1 text-white pt-1">Explore by</span>
-        <a class="btn btn-primary mx-2" data-target="Outcome"><span class="h2 text-white">Outcome</span></a>
-        <a class="btn btn-primary" data-target="Department"><span class="h2 text-white">Department</span></a>
+      <div class="pos-bc mb-5">
+        <p class="h3 text-white">Explore by</p>
+        <p>
+          <a class="btn btn-primary nav_buttons" href="#main">
+            <span class="h2 text-white" data-target="outcome">Outcome</span></a>
+          <a class="btn btn-primary nav_buttons" href="#main">
+            <span class="h2 text-white" data-target="department">Department</span></a>
+        </p>
       </div>
     </div>
   </div> <!-- Landing image -->
 
-  <div class="container-fluid">
-    <div class="row bg-dark">
+  <div class="container-fluid pb-5 bg-dark">
+    <div class="row">
       <div class="sidebar col-xs-12 col-md-3 pr-0">
-        <div class="h2  text-light mt-2 mx-auto">Updates</div>
+        <div class="h2 text-light mt-2 mx-auto">Total Updates</div>
         <div id="donutChart" class="mx-auto"></div>
         <div class="h2 text-light mt-2 mx-auto">Top Departments</div>
         <div id="departmentChart" class="mx-auto"></div>
@@ -43,14 +47,17 @@
         <div id="outcomeChart" class="mx-auto"></div>
       </div> <!-- sidebar-->
       <div class="main col-xs-12 col-md-9 pl-0" id="main">
-        <div class="d-flex flex-wrap justify-content-around px-0">
-          <template>
+        <template>
+          <div class="row d-flex justify-content-center">
+            <div class="h2 text-white"><%= title.toUpperCase() %></div>
+          </div>
+          <div class="d-flex flex-wrap justify-content-center">
             <% outcomes.forEach(function(outcome){ %>
-            <div class="col-md-3 col-sm-6 col-xs-12 px-0">
+            <div class="col-md-2 col-sm-6 col-xs-12 my-1 mr-0 mr-1">
               <div class="hovereffect">
                 <img class="img-fluid" src="<%= outcome.img %>">
                 <div class="overlay">
-                  <div class="h2 text-light"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></div>
+                  <div class="h3 text-light"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></div>
                   <div class="pos-bl">
                     <a href="promises?Outcome=<%= outcome.Outcome %>">
                       <div class="text-light"><%= outcome['Promise|count']%> Promises</div>
@@ -64,29 +71,15 @@
               </div>
             </div>
             <% }) %>
-          </template>
-        </div>
+          </div>
+        </template>
       </div>
       <!--main-content-->
     </div>
-    <div class="row bg-primary">
-      <!--footer-->
-      <div class="col-md-4 Partner">
-        <div class="text-white font-weight-bold h5">
-          Partner Links
-        </div>
-        <div class="text-white">Aam Aadmi Party</div>
-        <div class="text-white">Delhi Dialogue</div>
-        <div class="text-white">CCN</div>
-      </div>
-      <div class="col-md-4 Social">
-        <div class="text-white font-weight-bold h5"></div>
-      </div>
-    </div>
+
     <!--footer-->
   </div> <!-- container-fluid -->
-
-
+  {% include footer.html %}
 
   <script src="ui/jquery/dist/jquery.min.js"></script>
   <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -106,14 +99,16 @@
         renderVega(getMarimekkoSpec(aggregator), container, filteredUpdates)
       })
     }
-    function renderVega(spec, field, data = null) {
+    function renderVega(spec, container, data = null) {
       if (data) { // for the marimekko chart, data needs to be passed explicitly.
         spec.data[0].values = data
       }
+      width = $(container).width()
+      spec.width = width
       var view = new vega.View(vega.parse(spec))
         .renderer('svg')
         .logLevel(vega.Warn)
-        .initialize(field)
+        .initialize(container)
         .hover()
         .run()
     }
@@ -132,7 +127,7 @@
         group = group[0]
         outputs = _.merge(group, promises, updates)
         // console.log(outputs)
-        $('body').template({ outcomes: outputs })
+        $('body').template({ outcomes: outputs, title: `${field}s` })
       })
     }
 
@@ -142,6 +137,7 @@
       renderVega(donutSpec, '#donutChart')
       draw_cards('Outcome')
       $('.nav_buttons').on('click', function (button) {
+        console.log($(button.target).data('target'))
         draw_cards($(button.target).data('target'))
       })
     })
