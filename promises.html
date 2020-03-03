@@ -12,26 +12,31 @@
 <body>
   {% set base = '.' %}
   {% include template-navbar.html %}
-  <div class="container-fluid bg">
-    <div class="row overlay-black">
-        <div class="col-md-2">
-          <div class="text-white h2">Outcomes</div>
-          <div class="text-white h2">Departments</div>
-        </div> <!--sidebar-->
-        <div class="col-md-10">
-          <div class="d-flex flex-row justify-content-between">
-            <div class="text-white h1">Promises</div>
-            <div id="statusChart"></div>
-          </div><!-- Title Row -->
-          <div class="d-flex flex-wrap">
-            <template>
-              <% promises.forEach(function(promise){ %>
-                <div class="col-md-3 mr-1 text-white"><%= promise %></div>
-              <% }) %>
-            </template>
+  <div class="container-fluid bg2">
+    <div class="row overlay-black overflow-auto">
+      <div class="col-md-2 col-sm-4">
+        <div class="text-white h2">Outcomes</div>
+        <div class="text-white h2">Departments</div>
+      </div>
+      <!--sidebar-->
+      <div class="col-md-10 col-sm-8">
+        <div class="d-flex flex-row justify-content-between">
+          <div class="text-white h1">Promises</div>
+          <div id="statusChart"></div>
+        </div><!-- Title Row -->
+        <div class="d-flex flex-wrap justify-content-between">
+          <template>
+            <% for (var promise of Object.keys(promises)) { %>
+              <div class="card col-md-3 text-white m-1 op">
+                <div class="card-body text-middle text-center ">
+                  <%= promise.toUpperCase() %>
+                </div>
+              </div>
+            <% } %>
+          </template>
 
-          </div><!-- Promises Container -->
-        </div><!-- Main content -->
+        </div><!-- Promises Container -->
+      </div><!-- Main content -->
     </div>
   </div>
   {% include footer.html %}
@@ -43,44 +48,29 @@
   <script>
     $(function () {
       url = g1.url.parse(window.location)
-      let selOutcome = url.searchKey.Outcome || ''
+      promisesURL = g1.url.parse('data/promises').update(url.searchKey).toString()
+      updatesURL = g1.url.parse('data/updates').update(url.searchKey).toString()
       $.when(
-        $.getJSON('data/outcomes?_sort=Outcome'),
-        $.getJSON(`data/promises?Outcome=${selOutcome}`),
-        $.getJSON('data/updates?_by=Promise&_by=Status&_c=Status|count'),
-        $.getJSON('data/updates?_by=SubPromise&_by=Status&_c=Status|count')
-        // $.get('data/updates')
-      ).done(function (outcomes, promises, updateStatusByPromise, updateStatusBySubPromise) {
-        var promiseCollector = {}
-        var subPromiseCollector = {}
+        $.getJSON('data/outcome?_sort=Outcome'),
+        $.getJSON('data/department?_sort=Department'),
+        $.getJSON(updatesURL)
+      ).done(function (outcomes, departments, updates) {
+        // key the promiseCollector object with each promise.
+        // subsequently count the number of status of each
 
-        promises[0].forEach(function (o) {
-          if (o.Promise in promiseCollector)
-            promiseCollector[o.Promise]['subPromises'].push(o['Sub promise'])
+        var promiseCollector = {}
+        updates[0].forEach(function (update) {
+          if (update.Promise in promiseCollector)
+            promiseCollector[update.Promise][update.Status]++
           else {
-            promiseCollector[o.Promise] = { 'subPromises': [o['Sub promise']] }
+            promiseCollector[update.Promise] = { 'Fulfilled': 0, 'Partially Fulfilled': 0, 'Unfulfilled': 0 }
           }
         })
-
-        updateStatusByPromise[0].forEach(function (statusCount) {
-          promiseCollector[statusCount.Promise][statusCount.Status] = statusCount['Status|count']
-        })
-
-        promises[0].forEach(function (subPromiseAdd) {
-          subPromiseCollector[subPromiseAdd['Sub promise']] = {}
-        })
-
-        updateStatusBySubPromise[0].forEach(function (statusCount) {
-
-          if (statusCount.SubPromise in subPromiseCollector)
-            subPromiseCollector[statusCount.SubPromise][statusCount.Status] = statusCount['Status|count']
-        })
-        console.log(subPromiseCollector)
+        console.log(promiseCollector)
         $('body').template({
           outcomes: outcomes[0],
-          promises: promiseCollector,
-          selOutcome: selOutcome,
-          subPromises: subPromiseCollector
+          departments: departments[0],
+          promises: promiseCollector
         })
       })
 

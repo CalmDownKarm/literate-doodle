@@ -46,11 +46,21 @@ body, html{
   background-size: cover;
   background-attachment: fixed;
 }
+div .op{
+  background-color:rgba(29, 129, 178, 0.5);
+}
+.bg2 {
+  /* Used for backgrounds */
+  background-image: url("assets/images/ak_banner.jpg");
 
-/* .pill-ki-height {
-  height: 10px;
-  display:block;
-} */
+  /* Full height */
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
 
 /* -- Hover stuff copied from https://miketricking.github.io/bootstrap-image-hover/*/
 .hovereffect {
