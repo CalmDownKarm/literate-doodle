@@ -15,8 +15,38 @@
   <div class="container-fluid bg2">
     <div class="row overlay-black overflow-auto">
       <div class="col-md-2 col-sm-4">
-        <div class="text-white h2">Outcomes</div>
-        <div class="text-white h2">Departments</div>
+        <div class="outcomes mh-10">
+          <div class="text-white h2">Outcomes</div>
+          <template>
+            <ul class="nav flex-column overflow-auto">
+              <li class="nav-item">
+                <a href="promises?" class="text-white font-weight-bold">All</a>
+              </li>
+              <% outcomes.forEach(function(outcome){ %>
+              <li class="nav-item">
+                <a href="promises?Outcome=<%=outcome.Outcome%>" class="text-white font-weight-bold">
+                  <%=outcome.Outcome%></a>
+              </li>
+              <% }) %>
+            </ul>
+          </template>
+        </div><!-- Outcomes -->
+        <div class="departments">
+          <div class="text-white h2">Departments</div>
+          <template>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a href="promises?" class="text-white font-weight-bold">All</a>
+              </li>
+              <% departments.forEach(function(department){ %>
+              <li class="nav-item">
+                <a href="promises?Department=<%=department.Department%>" class="text-white font-weight-bold">
+                  <%=department.Department%></a>
+              </li>
+              <% }) %>
+            </ul>
+          </template>
+        </div>
       </div>
       <!--sidebar-->
       <div class="col-md-10 col-sm-8">
@@ -27,11 +57,11 @@
         <div class="d-flex flex-wrap justify-content-between">
           <template>
             <% for (var promise of Object.keys(promises)) { %>
-              <div class="card col-md-3 text-white m-1 op">
-                <div class="card-body text-middle text-center ">
-                  <%= promise.toUpperCase() %>
-                </div>
+            <div class="card col-md-3 text-white m-1 op">
+              <div class="card-body text-middle text-center ">
+                <%= promise.toUpperCase() %>
               </div>
+            </div>
             <% } %>
           </template>
 
@@ -66,7 +96,7 @@
             promiseCollector[update.Promise] = { 'Fulfilled': 0, 'Partially Fulfilled': 0, 'Unfulfilled': 0 }
           }
         })
-        console.log(promiseCollector)
+        console.log(outcomes[0])
         $('body').template({
           outcomes: outcomes[0],
           departments: departments[0],
