@@ -55,6 +55,12 @@ url:
       url: $YAMLPATH/assets/data/updates.xlsx
       json:
         date_format: iso
+
+  schedule:
+    run-on-utc-schedule:
+      function: aaptracker_new.schedule_me()
+      hours: 0
+      utc: true
   # TODO: ADD a scheduled job that syncs updates from the google sheets
 
 # Gramex init configurations for app: aaptracker_new
