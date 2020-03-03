@@ -12,100 +12,29 @@
 <body>
   {% set base = '.' %}
   {% include template-navbar.html %}
-  <!-- TODO: Filter bars -->
-  <div class="container-fluid">
-    {% include banner.html %}
-    <template>
-      <div class="text-center h1 text-primary">Promises</div>
-      <div class="row">
-        <div class="col-md-2 sidebar my-2 pr-0">
-          <div class="h4 text-primary">Outcomes</div>
-          <div class="divider"></div>
-          <ul class="nav flex-column nav-pills">
-            <% outcomes.forEach(function(outcome){ %>
-            <li class="nav-item">
-              <a class="nav-link <%= outcome.Outcome==selOutcome?'active':''%>"
-                href="promises?Outcome=<%=outcome.Outcome%>"><%= outcome.Outcome %></a></li>
-            <% }) %>
-          </ul>
-        </div>
-        <div class="col-md-10 px-0">
-          <div class="col-md-12 ml-0">
-            <% Object.keys(promises).forEach(function(promise){ %>
-            <div class="card mb-2">
-              <div class="card-body">
-                <div class="card-title h4 text-primary text-shadow d-flex flex-row">
+  <div class="container-fluid bg">
+    <div class="row overlay-black">
+        <div class="col-md-2">
+          <div class="text-white h2">Outcomes</div>
+          <div class="text-white h2">Departments</div>
+        </div> <!--sidebar-->
+        <div class="col-md-10">
+          <div class="d-flex flex-row justify-content-between">
+            <div class="text-white h1">Promises</div>
+            <div id="statusChart"></div>
+          </div><!-- Title Row -->
+          <div class="d-flex flex-wrap">
+            <template>
+              <% promises.forEach(function(promise){ %>
+                <div class="col-md-3 mr-1 text-white"><%= promise %></div>
+              <% }) %>
+            </template>
 
-                  <div class="mr-1 text-center">
-                    <span>
-                      <button type="button" class="btn btn-success round">
-                        <span
-                          class="badge badge-light round"><%= promises[promise]['Done']!=null?promises[promise]['Done']:0%></span>
-                      </button>
-                    </span>
-                    <span>
-                      <button type="button" class="btn btn-warning round">
-                        <span
-                          class="badge badge-light round"><%= promises[promise]['In Progress']!=null?promises[promise]['In Progress']:0 %></span>
-                      </button>
-                    </span>
-                    <span>
-                      <button type="button" class="btn btn-primary round">
-                        <span
-                          class="badge badge-light round"><%= promises[promise]['Started']!=null?promises[promise]['Started']:0%></span>
-                      </button>
-                    </span>
-                    <span>
-                      <button type="button" class="btn btn-danger round">
-                        <span
-                          class="badge badge-light round"><%= promises[promise]['Not Started']!=null?promises[promise]['Not Started']:0%></span>
-                      </button>
-                    </span>
-                  </div>
-
-
-                  <a href="updates?Promise=<%= promise %>"> <span><%= promise.toUpperCase() %></span> </a>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <% promises[promise]['subPromises'].forEach(function(subPromise){ %>
-                  <li class="list-group-item">
-
-                    <a href="updates?SubPromise=<%= subPromise %>"> <span><%=subPromise%></span> </a>
-                    <span>
-                      <button type="button" class="btn btn-success round">
-                        <span
-                          class="badge badge-light round" ><%= subPromises[subPromise]['Done']!=null?subPromises[subPromise]['Done']:0%></span>
-
-                      </button>
-                    </span>
-                    <span>
-                      <button type="button" class="btn btn-warning round">
-                        <span
-                          class="badge badge-light round"><%= subPromises[subPromise]['In Progress']!=null?subPromises[subPromise]['In Progress']:0 %></span>
-                      </button>
-                    </span>
-                    <span>
-                      <button type="button" class="btn btn-primary round">
-                        <span
-                          class="badge badge-light round"><%= subPromises[subPromise]['Started']!=null?subPromises[subPromise]['Started']:0%></span>
-                      </button>
-                    </span>
-                    <span>
-                      <button type="button" class="btn btn-danger round">
-                        <span
-                          class="badge badge-light round"><%= subPromises[subPromise]['Not Started']!=null?subPromises[subPromise]['Not Started']:0%></span>
-                      </button>
-                    </span>
-                  </li>
-                  <% }) %>
-                </ul>
-              </div>
-            </div>
-            <% }) %>
-          </div>
-    </template>
+          </div><!-- Promises Container -->
+        </div><!-- Main content -->
+    </div>
   </div>
-  </div> <!-- .container-fluid -->
+  {% include footer.html %}
 
   <script src="ui/jquery/dist/jquery.min.js"></script>
   <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -146,10 +75,6 @@
           if (statusCount.SubPromise in subPromiseCollector)
             subPromiseCollector[statusCount.SubPromise][statusCount.Status] = statusCount['Status|count']
         })
-
-
-
-
         console.log(subPromiseCollector)
         $('body').template({
           outcomes: outcomes[0],
