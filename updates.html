@@ -12,79 +12,63 @@
 <body>
   {% set base = '.' %}
   {% include template-navbar.html %}
-  <!-- TODO: Filter bars -->
-  <div class="container-fluid">
-    {% include banner.html %}
-    <template>
-      <div class="text-center h1 text-primary"><%= title %></div>
-      <div class="row">
-        <div class="col-md-2 sidebar my-2 pr-0">
-          <div class="h4 text-primary">---------------------------</div>
-          <div class="divider"></div>
-          <!-- <ul class="nav flex-column nav-pills">
-            <% outcomes.forEach(function(outcome){ %>
-            <li class="nav-item">
-              <a class="nav-link <%= outcome.Outcome==selPromise?'active':''%>"
-                href="promises?Outcome=<%=outcome.Outcome%>"><%= outcome.Outcome %></a></li>
-            <% }) %>
-          </ul> -->
-        </div>
-        <div class="col-md-10 px-0">
-          <div class="col-md-12 ml-0">
-            <% updates.forEach(function(update){ %>
-
-            <div class="card mb-2">
-              <div class="card-body">
-                <div class="card-title h6">
-                  <div class="d-flex justify-content-between">
-                    <div class="pill-ki-height">
-
-                      <% if (update.Status=="Done"){ %>
-                      <button type="button" class="btn round btn-success">
-                        <%= update['Status']%>
-                      </button>
-                      <%}%>
-                        <% if (update.Status=="In Progress") { %>
-                      <button type="button" class="btn round btn-warning">
-                        <%= update['Status']%>
-                      </button>
-                      <%}%>                    
-                      <% if (update.Status=="Started") { %>
-                        <button type="button" class="btn round btn-primary">
-                          <%= update['Status']%>
-                        </button>
-                        <%}%>                       
-                         <% if (update.Status=="Not Started") { %>
-                          <button type="button" class="btn round btn-danger">
-                            <%= update['Status']%>
-                          </button>
-                          <%}%>
-
-                    </div>
-
-                    <span class="text-primary text-center h4"><%= update.Title %></span>
-                      <% dat = new Date(update['Date of Update']).toISOString().split('T')[0].split('-').reverse() %>
-                      <span class="text-primary text-center h4"><%= dat[0] %>/<%= dat[1] %>/<%= dat[2] %></span>
-                      <br><br>
-                    </div>
-                    <div>
-                      <span>
-                        <% update.Description == null? '' : update.Description.split('\n').forEach(function(line) { %>
-                        <p><%= line %></p>
-                        <%})%>
-                        <br><br>
-                      </span>
-                      <span>
-                        <a href="<%= update['Proof URL'] %>">Proof</a></span></div>
-
-                  </div>
-                </div>
-              </div>
+  <div class="container-fluid bg2">
+    <div class="row overlay-black overflow-auto">
+      <div class="col-md-2 col-sm-4">
+        <div class="text-white h2">Promises</div>
+        <div class="promises mh-10">
+          <template>
+            <ul class="nav flex-column overflow-auto">
+              <li class="nav-item">
+                <a href="updates?" class="text-white font-weight-bold">All</a>
+              </li>
+              <% promises.forEach(function(outcome){ %>
+              <li class="nav-item">
+                <a href="updates?Promise=<%=promise.Promise%>" class="text-white font-weight-bold">
+                  <%=promise.Promise%></a>
+              </li>
               <% }) %>
+            </ul>
+          </template>
+        </div><!-- Promises -->
+      </div>
+      <!--sidebar-->
+      <div class="col-md-10 col-sm-8">
+        <div class="d-flex flex-row justify-content-between">
+          <div class="text-white h1">Promises</div>
+          <div id="statusChart"></div>
+        </div><!-- Title Row -->
+        <div class="d-flex flex-wrap justify-content-between">
+          <template>
+            <% for (var promise of Object.keys(promises)) { %>
+            <div class="card col-md-3 text-white m-1 op">
+              <div class="card-body text-middle text-center"><%= promise.toUpperCase() %></div>
+              <div class="divover">
+                <div class="inner">
+                  <div>
+                    <a href="updates?promise=<%=promise%>">
+                      <div class="h3 text-white text-center text-middle">Total Updates</div>
+                      <div class="d-flex flex-row justify-content-around">
+                        <div>
+                          <span class="badge badge-success round h3"><%=promises[promise]['Fulfilled']%></span>
+                          <span
+                            class="badge badge-primary round h3"><%=promises[promise]['Partially Fulfilled']%></span>
+                          <span class="badge badge-danger round h3"><%=promises[promise]['Unfulfilled']%></span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div><!-- inner -->
+              </div> <!-- overlay -->
             </div>
-    </template>
+            <% } %>
+          </template>
+
+        </div><!-- Promises Container -->
+      </div><!-- Main content -->
+    </div>
   </div>
-  </div> <!-- .container-fluid -->
+  {% include footer.html %}
 
   <script src="ui/jquery/dist/jquery.min.js"></script>
   <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -93,37 +77,29 @@
   <script>
     $(function () {
       url = g1.url.parse(window.location)
-      let selPromise = url.searchKey.Promise || ''
-      let selSubPromise = url.searchKey.SubPromise || ''
-      let updateTitle = 'All Updates'
-      if (selPromise != '' && selSubPromise != '')
-        updateTitle = `Updates for ${selPromise} and ${selSubPromise}`
-      if (selPromise != '')
-        updateTitle = `Updates for ${selPromise}`
-      if (selSubPromise != '')
-        updateTitle = `Updates for ${selSubPromise}`
-
+      promisesURL = g1.url.parse('data/promises').update(url.searchKey).toString()
+      updatesURL = g1.url.parse('data/updates').update(url.searchKey).toString()
       $.when(
-        $.getJSON('data/outcomes?_sort=Outcome'),
-        $.getJSON(`data/promises?Promise=${selPromise}`),
-        $.getJSON(`data/updates?Promise=${selPromise}&SubPromise=${selSubPromise}&_sort=-Date of Update`)
-        // $.getJSON('data/updates?_by=Promise&_c=Promise|count')
-        // $.get('data/updates')
-      ).done(function (outcomes, promises, updates) {
-        var promiseCollector = {}
-        promises[0].forEach(function (o) {
-          if (o.Promise in promiseCollector)
-            promiseCollector[o.Promise].push(o['Sub promise'])
-          else
-            promiseCollector[o.Promise] = [o['Sub promise']]
-        })
+        $.getJSON('data/outcome?_sort=Outcome'),
+        $.getJSON('data/department?_sort=Department'),
+        $.getJSON(updatesURL)
+      ).done(function (outcomes, departments, updates) {
+        // key the promiseCollector object with each promise.
+        // subsequently count the number of status of each
 
+        var promiseCollector = {}
+        updates[0].forEach(function (update) {
+          if (update.Promise in promiseCollector)
+            promiseCollector[update.Promise][update.Status]++
+          else {
+            promiseCollector[update.Promise] = { 'Fulfilled': 0, 'Partially Fulfilled': 0, 'Unfulfilled': 0 }
+          }
+        })
+        console.log(promiseCollector)
         $('body').template({
           outcomes: outcomes[0],
-          promises: promiseCollector,
-          selPromise: selPromise,
-          updates: updates[0],
-          title: updateTitle,
+          departments: departments[0],
+          promises: promiseCollector
         })
       })
 

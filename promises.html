@@ -15,8 +15,8 @@
   <div class="container-fluid bg2">
     <div class="row overlay-black overflow-auto">
       <div class="col-md-2 col-sm-4">
+        <div class="text-white h2">Outcomes</div>
         <div class="outcomes mh-10">
-          <div class="text-white h2">Outcomes</div>
           <template>
             <ul class="nav flex-column overflow-auto">
               <li class="nav-item">
@@ -31,8 +31,8 @@
             </ul>
           </template>
         </div><!-- Outcomes -->
+        <div class="text-white h2">Departments</div>
         <div class="departments">
-          <div class="text-white h2">Departments</div>
           <template>
             <ul class="nav flex-column">
               <li class="nav-item">
@@ -58,9 +58,24 @@
           <template>
             <% for (var promise of Object.keys(promises)) { %>
             <div class="card col-md-3 text-white m-1 op">
-              <div class="card-body text-middle text-center ">
-                <%= promise.toUpperCase() %>
-              </div>
+              <div class="card-body text-middle text-center"><%= promise.toUpperCase() %></div>
+              <div class="divover">
+                <div class="inner">
+                  <div>
+                    <a href="updates?promise=<%=promise%>">
+                      <div class="h3 text-white text-center text-middle">Total Updates</div>
+                      <div class="d-flex flex-row justify-content-around">
+                        <div>
+                          <span class="badge badge-success round h3"><%=promises[promise]['Fulfilled']%></span>
+                          <span
+                            class="badge badge-primary round h3"><%=promises[promise]['Partially Fulfilled']%></span>
+                          <span class="badge badge-danger round h3"><%=promises[promise]['Unfulfilled']%></span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div><!-- inner -->
+              </div> <!-- overlay -->
             </div>
             <% } %>
           </template>
@@ -96,7 +111,7 @@
             promiseCollector[update.Promise] = { 'Fulfilled': 0, 'Partially Fulfilled': 0, 'Unfulfilled': 0 }
           }
         })
-        console.log(outcomes[0])
+        console.log(promiseCollector)
         $('body').template({
           outcomes: outcomes[0],
           departments: departments[0],

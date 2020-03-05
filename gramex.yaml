@@ -18,7 +18,7 @@ url:
     cache: {expiry: {duration: 1}}
 
   aaptracker-pages:
-    pattern: /$YAMLURL/(promises|outcomes|updates)
+    pattern: /$YAMLURL/(promises|updates)
     handler: FileHandler
     kwargs:
       template: true
@@ -56,12 +56,12 @@ url:
       json:
         date_format: iso
 
-  schedule:
-    run-on-utc-schedule:
-      function: aaptracker_new.schedule_me()
-      hours: 0
-      utc: true
-  # TODO: ADD a scheduled job that syncs updates from the google sheets
+  # schedule:
+  #   run-on-utc-schedule:
+  #     function: aaptracker_new.schedule_me
+  #     hours: 0
+  #     utc: true
+  # # TODO: ADD a scheduled job that syncs updates from the google sheets
 
 # Gramex init configurations for app: aaptracker_new
 # ----------------------------------------------------------------------------
