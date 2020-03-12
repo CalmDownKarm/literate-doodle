@@ -50,9 +50,13 @@
       </div>
       <!--sidebar-->
       <div class="col-md-10 col-sm-8">
-        <div class="d-flex flex-row justify-content-between">
-          <div class="text-white h1">Promises</div>
-          <div id="statusChart"></div>
+        <div class="row my-3">
+          <div class="col-md-9">
+            <div class="text-white h1 text-middle">Promises</div>
+          </div>
+          <div class="col-md-3">
+            <div id="statusChart"></div>
+          </div>
         </div><!-- Title Row -->
         <div class="d-flex flex-wrap justify-content-between">
           <template>
@@ -90,11 +94,18 @@
   <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="ui/lodash/lodash.min.js"></script>
   <script src="ui/g1/dist/g1.min.js"></script>
+  <script src="ui/vega/build/vega.min.js"></script>
+  <script src="js/donut.js"></script>
+  <script src="js/common.js"></script>
+
+
   <script>
     $(function () {
       url = g1.url.parse(window.location)
       promisesURL = g1.url.parse('data/promises').update(url.searchKey).toString()
       updatesURL = g1.url.parse('data/updates').update(url.searchKey).toString()
+      donutURL = g1.url.parse('data/updates?_by=Status&_c=Status|count').update(url.searchKey).toString()
+      renderVega(getDonutSpec(donutURL), '#statusChart')
       $.when(
         $.getJSON('data/outcome?_sort=Outcome'),
         $.getJSON('data/department?_sort=Department'),
@@ -111,7 +122,6 @@
             promiseCollector[update.Promise] = { 'Fulfilled': 0, 'Partially Fulfilled': 0, 'Unfulfilled': 0 }
           }
         })
-        console.log(promiseCollector)
         $('body').template({
           outcomes: outcomes[0],
           departments: departments[0],
