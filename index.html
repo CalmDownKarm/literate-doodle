@@ -57,12 +57,14 @@
               <div class="hovereffect">
                 <img class="img-fluid" src="<%= outcome.img %>">
                 <div class="overlay">
-                  <div class="h3 text-light"><%= outcome.Outcome? outcome.Outcome : outcome.Department %></div>
+                  <% var value = outcome.Outcome ? outcome.Outcome : outcome.Department %>
+                  <% var field = outcome.Outcome ? 'Outcome': 'Department' %>
+                  <div class="h3 text-light"><%= value %></div>
                   <div class="pos-bl">
-                    <a href="promises?Outcome=<%= outcome.Outcome %>">
+                    <a href="promises?<%= field %>=<%= value %>">
                       <div class="text-light"><%= outcome['Promise|count']%> Promises</div>
                     </a>
-                    <a href="updates?Outcome=<%= outcome.Outcome %>">
+                    <a href="updates?<%= field %>=<%= value %>">
                       <div class="text-light">
                         <%= outcome['Update|count']  %> Updates </div>
                     </a>
