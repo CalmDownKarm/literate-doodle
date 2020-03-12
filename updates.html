@@ -41,7 +41,7 @@
             <div class="text-white h1 mb-0"> <%= promise.toUpperCase() %></div>
             <div class="text-white h3"> Updates</div>
             <% for (var subPromise of Object.keys(updates[promise])) { %>
-            <div class="border border-white mb-5 overlay-black">
+            <div class="border border-white mb-4 overlay-black">
               <!-- Each Subpromise in its own div-->
               <div class="card-header text-white text-center h5"><%= subPromise.toUpperCase() %></div>
               <% let updateList = _.orderBy(updates[promise][subPromise], 'Date of Update', 'desc') %>

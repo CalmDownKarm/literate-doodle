@@ -16,15 +16,11 @@
     Other
       https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss
 */
-@import url("ui/bootstraptheme.css?body-bg=white&navbar-dark-color=rgba(255%2C255%2C255%2C.8)&navbar-dark-hover-color=white&primary=rgba(29%2C129%2C178%2C1)");
+@import url("ui/bootstraptheme.css?body-bg=white&navbar-dark-color=rgba(255%2C255%2C255%2C.8)&navbar-dark-hover-color=white&primary=rgba(29%2C129%2C178%2C1)&success=rgba(102%2C153%2C51%2C1)&danger=rgba(204%2C51%2C0%2C1)");
 /* For v4 icons, use url("ui/font-awesome/css/font-awesome.min.css") */
 @import url("ui/@fortawesome/fontawesome-free/css/all.min.css");
 
-/* .image-ka-size-hai-ye {
-  height: 50px;
 
-
-} */
 html {
   scroll-behavior: smooth;
 }
@@ -171,7 +167,7 @@ div .op{
   left:0px;
 
   background-color:black;
-  opacity:0.9;    
+  opacity:0.9;
 }
 
 .divover > .inner {
