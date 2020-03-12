@@ -12,17 +12,17 @@
 <body>
   {% set base = '.' %}
   {% include template-navbar.html %}
-  <div class="container-fluid bg2">
-    <div class="row overlay-black overflow-auto">
+  <div class="container-fluid bg2 h-80">
+    <div class="row overlay-black overflow-auto h-100">
       <div class="col-md-2 col-sm-4">
-        <div class="text-white h2">Updates</div>
-        <div class="promises mh-10">
+        <div class="text-white h2">Promises</div>
+        <div class="border-right border-white">
           <template>
             <ul class="nav flex-column overflow-auto">
               <li class="nav-item">
                 <a href="updates?" class="text-white font-weight-bold">All</a>
               </li>
-              <% promises.forEach(function(outcome){ %>
+              <% promises.forEach(function(promise){ %>
               <li class="nav-item">
                 <a href="updates?Promise=<%=promise.Promise%>" class="text-white font-weight-bold">
                   <%=promise.Promise%></a>
@@ -34,37 +34,33 @@
       </div>
       <!--sidebar-->
       <div class="col-md-10 col-sm-8">
-        <div class="d-flex flex-row justify-content-between">
-          <div class="text-white h1">Promises</div>
-          <div id="statusChart"></div>
-        </div><!-- Title Row -->
-        <div class="d-flex flex-wrap justify-content-between">
-          <template>
-            <% for (var promise of Object.keys(promises)) { %>
-            <div class="card col-md-3 text-white m-1 op">
-              <div class="card-body text-middle text-center"><%= promise.toUpperCase() %></div>
-              <div class="divover">
-                <div class="inner">
-                  <div>
-                    <a href="updates?promise=<%=promise%>">
-                      <div class="h3 text-white text-center text-middle">Total Updates</div>
-                      <div class="d-flex flex-row justify-content-around">
-                        <div>
-                          <span class="badge badge-success round h3"><%=promises[promise]['Fulfilled']%></span>
-                          <span
-                            class="badge badge-primary round h3"><%=promises[promise]['Partially Fulfilled']%></span>
-                          <span class="badge badge-danger round h3"><%=promises[promise]['Unfulfilled']%></span>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div><!-- inner -->
-              </div> <!-- overlay -->
-            </div>
-            <% } %>
-          </template>
+        <template>
+          <% for (var promise of Object.keys(updates)) { %>
+          <div class="mb-5">
+            <!-- Each promise in its own div -->
+            <div class="text-white h1 mb-0"> <%= promise.toUpperCase() %></div>
+            <div class="text-white h3"> Updates</div>
+            <% for (var subPromise of Object.keys(updates[promise])) { %>
+            <div class="border border-white mb-5 overlay-black">
+              <!-- Each Subpromise in its own div-->
+              <div class="card-header text-white text-center h5"><%= subPromise.toUpperCase() %></div>
+              <% let updateList = _.orderBy(updates[promise][subPromise], 'Date of Update', 'desc') %>
+              <% updateList.forEach(function(update){ %>
+                <% var newDate = new Date() %>
+                <% newDate.setTime(update['Date of Update']) %>
+                <div class="card-body text-white py-2 border-bottom border-grey">
+                  <p class="mb-1"><%= newDate.toDateString() %></p>
+                  <p class="mb-1"><%= update.Description %></p>
+                  <% let pillColor = update.Status == 'Partially Fulfilled'? 'bg-primary' : update.Status == 'Fulfilled' ? 'bg-success': 'bg-danger' %>
+                  <p class="mb-1"><a class="btn text-white round <%= pillColor %>" href="<%= update['Proof URL'] %>"><%= update.Status %></a></p>
+                </div>
+                <% }) %>
 
-        </div><!-- Promises Container -->
+            </div> <!-- subpromises div-->
+            <% } %>
+          </div> <!-- End of promise div-->
+          <% } %>
+        </template>
       </div><!-- Main content -->
     </div>
   </div>
@@ -74,40 +70,31 @@
   <script src="ui/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="ui/lodash/lodash.min.js"></script>
   <script src="ui/g1/dist/g1.min.js"></script>
+  <script src="ui/morphdom/dist/morphdom-umd.min.js"></script>
   <script>
     $(function () {
       url = g1.url.parse(window.location)
-      promisesURL = g1.url.parse('data/promises').update(url.searchKey).toString()
+      promisesURL = g1.url.parse('data/promises?_by=Promise&_c=Promise').update(url.searchKey).toString()
       updatesURL = g1.url.parse('data/updates').update(url.searchKey).toString()
       $.when(
-        $.getJSON('data/outcome?_sort=Outcome'),
-        $.getJSON('data/department?_sort=Department'),
+        $.getJSON(promisesURL),
         $.getJSON(updatesURL)
-      ).done(function (outcomes, departments, updates) {
-        // key the promiseCollector object with each promise.
-        // subsequently count the number of status of each
-
-        var promiseCollector = {}
-        updates[0].forEach(function (update) {
-          if (update.Promise in promiseCollector)
-            promiseCollector[update.Promise][update.Status]++
-          else {
-            promiseCollector[update.Promise] = { 'Fulfilled': 0, 'Partially Fulfilled': 0, 'Unfulfilled': 0 }
-          }
-        })
-        console.log(promiseCollector)
+      ).done(function (promises, updates) {
+        let groupedPromise = _.groupBy(updates[0], 'Promise')
+        for (var promise of Object.keys(groupedPromise)) {
+          groupedPromise[promise] = _.groupBy(groupedPromise[promise], 'SubPromise')
+        }
+        console.log(groupedPromise)
         $('body').template({
-          outcomes: outcomes[0],
-          departments: departments[0],
-          promises: promiseCollector
-        })
+          promises: promises[0],
+          updates: groupedPromise
+        }, { engine: 'vdom' })
       })
 
     })
   </script>
   <!-- Commonly used libraries:
   <script src="ui/d3v5/dist/d3.min.js"></script>
-  <script src="ui/morphdom/dist/morphdom-umd.min.js"></script>
   <script src="ui/moment/min/moment-with-locales.min.js"></script>
   <script src="ui/daterangepicker/daterangepicker.js"></script>
   <script src="ui/leaflet/dist/leaflet.js"></script>

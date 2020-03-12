@@ -90,6 +90,7 @@
   <script src="ui/vega/build/vega.min.js"></script>
   <script src="js/donut.js"></script>
   <script src="js/bar.js"></script>
+  <script src="ui/morphdom/dist/morphdom-umd.min.js"></script>
   <script>
     function getDataM(aggregator = 'Department', container = '#departmentChart') {
       $.when(
@@ -129,7 +130,7 @@
         group = group[0]
         outputs = _.merge(group, promises, updates)
         // console.log(outputs)
-        $('body').template({ outcomes: outputs, title: `${field}s` })
+        $('body').template({ outcomes: outputs, title: `${field}s` }, {engine:'vdom'})
       })
     }
 
@@ -145,7 +146,6 @@
   </script>
   <!-- Commonly used libraries:
   <script src="ui/d3v5/dist/d3.min.js"></script>
-  <script src="ui/morphdom/dist/morphdom-umd.min.js"></script>
   <script src="ui/moment/min/moment-with-locales.min.js"></script>
   <script src="ui/daterangepicker/daterangepicker.js"></script>
   <script src="ui/leaflet/dist/leaflet.js"></script>
